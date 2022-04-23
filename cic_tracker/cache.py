@@ -1,3 +1,6 @@
+from stateness.redis import RedisMonitor
+
+
 class SyncTimeRedisCache:
 
     def __init__(self, host='localhost', port=6379, db=9999):
