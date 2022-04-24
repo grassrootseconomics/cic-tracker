@@ -3,3 +3,4 @@ chainlib-eth~=0.1.0
 celery~=4.4.7
 cic-eth-registry~=0.6.9
 chainqueue~=0.0.6rc9
+cic-sync-filter~=0.13.0
