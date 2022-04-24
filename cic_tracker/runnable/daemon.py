@@ -5,10 +5,11 @@ import datetime
 import importlib
 
 # external imports
-import cic_eth.cli
 from chainsyncer.error import SyncDone
 from chainsyncer.driver.chain_interface import ChainInterfaceDriver
 
+# cic_eth legacy imports
+import cic_eth.cli
 
 # local imports
 #from cic_tracker.cache import SyncTimeRedisCache
@@ -44,7 +45,6 @@ args_override = {
         'SYNC_SESSION_ID': getattr(args, 'session_id'),
         }
 config.add(args.until, '_UNTIL', True)
-
 
 
 def main():
