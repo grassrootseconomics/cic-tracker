@@ -3,6 +3,7 @@ import logging
 import os
 import datetime
 import importlib
+import sys
 
 # external imports
 from chainsyncer.error import SyncDone
@@ -35,15 +36,22 @@ local_arg_flags = cic_base.cli.argflag_local_sync
 argparser = cic_base.cli.ArgumentParser(arg_flags)
 argparser.add_argument('--session-id', dest='session_id', type=str, help='Session id to use for state store')
 argparser.add_argument('--until', type=int, default=0, help='Stop sync at the given block. 0 = infinite sync')
+argparser.add_argument('--backend', type=str, help='State store backend')
+argparser.add_argument('--list-backends', dest='list_backends', action='store_true', help='List built-in store backends')
 argparser.process_local_flags(local_arg_flags)
 args = argparser.parse_args()
 
+if args.list_backends:
+    for v in [
+            'fs',
+            'rocksdb',
+            'redis',
+            ]:
+        print(v)
+    sys.exit(0)
+
 # process config
 config = cic_base.cli.Config.from_args(args, arg_flags, local_arg_flags, base_config_dir=base_config_dir)
-args_override = {
-        'SYNCER_OFFSET': getattr(args, 'offset'),
-        'SYNCER_SESSION_ID': getattr(args, 'session_id'),
-        }
 config.add(args.until, '_UNTIL', True)
 
 
