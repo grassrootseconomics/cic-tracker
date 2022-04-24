@@ -35,7 +35,7 @@ class CICTrackerSettings(CICSettings):
 
 
     def process_sync_interface(self, config):
-        self.o['SYNC_INTERFACE'] = EthChainInterface()
+        self.o['SYNCER_INTERFACE'] = EthChainInterface()
 
     
     def process_sync_range(self, config):
@@ -47,7 +47,7 @@ class CICTrackerSettings(CICSettings):
         keep_alive = False
         session_block_offset = 0
         block_limit = 0
-        session_block_offset = int(config.get('SYNC_OFFSET'))
+        session_block_offset = int(config.get('SYNCER_OFFSET'))
 
         until = int(config.get('_UNTIL'))
         if until > 0:
@@ -64,34 +64,34 @@ class CICTrackerSettings(CICSettings):
             if block_limit == 0:
                 lock_limit = block_offset
     
-        self.o['SYNC_OFFSET'] = session_block_offset
-        self.o['SYNC_LIMIT'] = block_limit
+        self.o['SYNCER_OFFSET'] = session_block_offset
+        self.o['SYNCER_LIMIT'] = block_limit
 
 
     def process_sync_store(self, config):
         syncer_store_module = None
         syncer_store_class = None
-        if config.get('SYNC_BACKEND') == 'fs': 
+        if config.get('SYNCER_BACKEND') == 'fs': 
             syncer_store_module = importlib.import_module('chainsyncer.store.fs')
             syncer_store_class = getattr(syncer_store_module, 'SyncFsStore')
-        elif config.get('SYNC_BACKEND') == 'rocksdb':
+        elif config.get('SYNCER_BACKEND') == 'rocksdb':
             syncer_store_module = importlib.import_module('chainsyncer.store.rocksdb')
             syncer_store_class = getattr(syncer_store_module, 'SyncRocksDbStore')
         else:
-            syncer_store_module = importlib.import_module(config.get('SYNC_BACKEND'))
+            syncer_store_module = importlib.import_module(config.get('SYNCER_BACKEND'))
             syncer_store_class = getattr(syncer_store_module, 'SyncStore')
 
-        logg.info('using engine {} module {}.{}'.format(config.get('SYNC_BACKEND'), syncer_store_module.__file__, syncer_store_class.__name__))
+        logg.info('using engine {} module {}.{}'.format(config.get('SYNCER_BACKEND'), syncer_store_module.__file__, syncer_store_class.__name__))
 
-        state_dir = os.path.join(config.get('SYNC_DIR'), config.get('SYNC_BACKEND'))
-        sync_store = syncer_store_class(state_dir, session_id=config.get('SYNC_SESSION_ID'), state_event_callback=state_change_callback, filter_state_event_callback=filter_change_callback)
+        state_dir = os.path.join(config.get('SYNCER_DIR'), config.get('SYNCER_BACKEND'))
+        sync_store = syncer_store_class(state_dir, session_id=config.get('SYNCER_SESSION_ID'), state_event_callback=state_change_callback, filter_state_event_callback=filter_change_callback)
         logg.info('sync session is {}'.format(sync_store.session_id))
 
-        self.o['SYNC_STORE'] = sync_store
+        self.o['SYNCER_STORE'] = sync_store
 
 
     def process_sync_filters(self, config):
-        for v in config.get('SYNC_FILTER').split(','):
+        for v in config.get('SYNCER_FILTER').split(','):
             logg.debug('processing filter {}'.format(v))
             (path, cls) = v.rsplit('.', maxsplit=1)
             m = importlib.import_module(path)
@@ -102,7 +102,7 @@ class CICTrackerSettings(CICSettings):
                 m.set_method()
                 o.trusted_addresses = trusted_addresses
 
-            self.o['SYNC_STORE'].register(m)
+            self.o['SYNCER_STORE'].register(m)
 
 
     def process(self, config):
