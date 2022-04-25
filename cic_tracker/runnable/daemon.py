@@ -34,10 +34,6 @@ base_config_dir = os.path.join(script_dir, '..', 'data', 'config')
 arg_flags = cic_base.cli.argflag_std_read
 local_arg_flags = cic_base.cli.argflag_local_sync
 argparser = cic_base.cli.ArgumentParser(arg_flags)
-argparser.add_argument('--session-id', dest='session_id', type=str, help='Session id to use for state store')
-argparser.add_argument('--until', type=int, default=0, help='Stop sync at the given block. 0 = infinite sync')
-argparser.add_argument('--backend', type=str, help='State store backend')
-argparser.add_argument('--list-backends', dest='list_backends', action='store_true', help='List built-in store backends')
 argparser.process_local_flags(local_arg_flags)
 args = argparser.parse_args()
 
