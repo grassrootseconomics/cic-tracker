@@ -1,4 +1,4 @@
-chainsyncer[rocksdb]~=0.3.4
-chainlib-eth~=0.1.0
-cic-sync-filter~=0.13.1
-cic-base[legacy]~=0.13.0
+chainsyncer[rocksdb]==0.3.4
+chainlib-eth==0.1.0
+cic-sync-filter==0.13.1
+cic-base[legacy]==0.14.0

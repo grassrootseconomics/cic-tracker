@@ -14,7 +14,10 @@ import cic_base.cli
 
 # local imports
 #from cic_tracker.cache import SyncTimeRedisCache
-from cic_tracker.settings import CICTrackerSettings
+from cic_tracker.settings import (
+        CICTrackerSettings,
+        process_settings,
+        )
 from cic_tracker.callback import (
         pre_callback,
         post_callback,
@@ -53,7 +56,7 @@ config.add(args.until, '_UNTIL', True)
 
 def main():
     settings = CICTrackerSettings()
-    settings.process(config)
+    process_settings(settings, config)
     logg.debug('settings:\n' + str(settings))
 
     drv = ChainInterfaceDriver(

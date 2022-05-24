@@ -23,5 +23,3 @@ def state_change_callback(k, old_state, new_state):
 
 def filter_change_callback(k, old_state, new_state):
     logg.log(logging.STATETRACE, 'filter change: {} {} -> {}'.format(k, old_state, new_state)) 
-
-

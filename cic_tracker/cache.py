@@ -8,6 +8,7 @@ class SyncTimeRedisCache:
         self.state = RedisMonitor('cic-eth-tracker', host=host, port=port, db=db)
         self.state.register('lastseen', persist=True)
 
+
     def cache_time(self, block, tx):
         v = self.state.get('lastseen')
         if v != None:
@@ -15,5 +16,3 @@ class SyncTimeRedisCache:
             if v > block.timestamp:
                 return
         self.state.set('lastseen', block.timestamp)
-
-
